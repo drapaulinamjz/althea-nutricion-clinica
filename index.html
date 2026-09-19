@@ -96,8 +96,22 @@
     const dialogTitle=serviceDialog.querySelector('#dialog-title');
     const dialogDescription=serviceDialog.querySelector('.dialog-description');
     const dialogImage=serviceDialog.querySelector('.dialog-image');
+    const dialogWhatsApp=serviceDialog.querySelector('a[href^="https://wa.me/"]');
+    const serviceMessages={
+      "detail-obesidad": "Hola, me interesa una valoración para control de peso. ¿Qué horarios tienen disponibles?",
+      "detail-diabetes": "Hola, me interesa información sobre la consulta de diabetes e hipertensión. ¿Qué horarios tienen disponibles?",
+      "detail-somp": "Hola, me interesa la consulta de tratamiento y seguimiento nutricional de SOMP. ¿Qué horarios tienen disponibles?",
+      "detail-post": "Hola, me interesa información sobre el seguimiento nutricional después de cirugía bariátrica o estética. ¿Qué horarios tienen disponibles?",
+      "detail-embarazo": "Hola, me interesa información sobre la consulta de nutrición y suplementación durante el embarazo. ¿Qué horarios tienen disponibles?",
+      "detail-menopausia": "Hola, me interesa la consulta de nutrición y suplementación en premenopausia y menopausia. ¿Qué horarios tienen disponibles?",
+      "detail-inbody": "Hola, quisiera agendar una evaluación InBody. ¿Me pueden compartir disponibilidad?",
+      "detail-planes": "Hola, me interesa una consulta para un plan de alimentación personalizado. ¿Qué horarios tienen disponibles?",
+      "detail-suplementos": "Hola, me interesa una valoración de suplementación personalizada. ¿Qué horarios tienen disponibles?"
+};
     document.querySelectorAll('.service').forEach(card=>card.addEventListener('click',()=>{
       dialogTitle.textContent=card.dataset.title;
+      const message=serviceMessages[card.dataset.template] || ('Hola, me interesa información sobre '+card.dataset.title+'. ¿Qué horarios tienen disponibles?');
+      dialogWhatsApp.href='https://wa.me/527222643987?text='+encodeURIComponent(message);
       dialogDescription.replaceChildren(document.getElementById(card.dataset.template).content.cloneNode(true));
       dialogImage.src=card.dataset.image;
       dialogImage.alt=card.querySelector('img').alt;

@@ -15,12 +15,38 @@
   function formattedDate(key) {return dateFormat.format(new Date(key+'T12:00:00Z'));}
   function allowedDay(key) {
     const day=new Date(key+'T12:00:00Z').getUTCDay();
-    return $('branch').value==='Metepec' ? day>=1&&day<=5 : $('branch').value==='Calimaya' && day===6;
+    return $('branch').value==='Metepec' ? day>=1&&day<=5 : $('branch').value==='Atlacomulco' && day===6;
   }
+  function duration() {
+    const match=$('visitType').value.match(/(60|40|45) min/);
+    return match ? Number(match[1]) : null;
+  }
+  function slots() {
+    if(!selectedDate || !allowedDay(selectedDate)) return [];
+    if(duration()===null) return ['Por acordar por WhatsApp'];
+    const day=new Date(selectedDate+'T12:00:00Z').getUTCDay();
+    const end=day===6?780:day===1||day===5?1080:900;
+    const now=nowInMexico(), result=[];
+    for(let m=540;m+duration()<=end;m+=5){
+      const t=String(Math.floor(m/60)).padStart(2,'0')+':'+String(m%60).padStart(2,'0');
+      if(selectedDate>now.date||(selectedDate===now.date&&t>now.time)) result.push(t);
+    }
+    return result;
+  }
+  function renderTimes(){
+    const el=$('time'); el.replaceChildren();
+    const placeholder=document.createElement('option'); placeholder.value='';
+    const choices=slots();
+    placeholder.textContent=selectedDate?(choices.length?'Selecciona una hora':'Sin horarios para esta fecha'):'Selecciona primero una fecha';
+    el.append(placeholder);
+    choices.forEach(t=>{const option=document.createElement('option');option.value=t;option.textContent=t;el.append(option);});
+    el.value='';
+  }
+  $('visitType').addEventListener('change',renderTimes);
   $('branch').addEventListener('change',()=>{
     selectedDate=''; $('time').value='';
     $('selection').textContent='Selecciona una fecha.';
-    $('formError').textContent=''; render();
+    $('formError').textContent=''; render(); renderTimes();
   });
   function render() {
     const now = nowInMexico();
@@ -35,7 +61,7 @@
       const b=document.createElement('button'); b.type='button'; b.className='calendar-day'; b.textContent=day;
       b.disabled=key<now.date||!allowedDay(key); b.setAttribute('aria-label',formattedDate(key)); b.setAttribute('aria-pressed',String(key===selectedDate));
       b.classList.toggle('selected',key===selectedDate); b.classList.toggle('today',key===now.date);
-      b.addEventListener('click',()=>{selectedDate=key;$('selection').textContent=formattedDate(key);$('formError').textContent='';render();});
+      b.addEventListener('click',()=>{selectedDate=key;$('selection').textContent=formattedDate(key);$('formError').textContent='';render();renderTimes();});
       grid.append(b);
     }
     $('previousMonth').disabled=cursor.toISOString().slice(0,7)<=now.date.slice(0,7);
@@ -52,6 +78,7 @@
     if(!$('fullName').value.trim()){$('fullName').setCustomValidity('Escribe tu nombre.');$('fullName').reportValidity();return;}
     if(!selectedDate){error.textContent='Selecciona una fecha en el calendario.';$('nextMonth').focus();return;}
     if(!allowedDay(selectedDate)){error.textContent='Selecciona una fecha de atención para esta sucursal.';return;}
+    if(!slots().includes($('time').value)){error.textContent='Selecciona una hora dentro del horario de atención.';renderTimes();return;}
     const now=nowInMexico();
     if(selectedDate<now.date||(selectedDate===now.date&&$('time').value<=now.time)){error.textContent='Elige una fecha y hora futuras (hora del centro de México).';return;}
     const message=[ 'Hola, me gustaría solicitar una cita en Althea.', `Sucursal: ${$('branch').value}`, `Consulta: ${$('visitType').value}`, `Fecha de preferencia: ${formattedDate(selectedDate)}`, `Hora de preferencia: ${$('time').value} (centro de México)`, `Nombre: ${$('fullName').value.trim()}`, `Correo: ${$('email').value.trim()}`, `Teléfono: ${$('phone').value.trim()}`, 'Acepto que Althea use estos datos para gestionar mi solicitud. Quedo pendiente de confirmar disponibilidad.' ].join('\n');

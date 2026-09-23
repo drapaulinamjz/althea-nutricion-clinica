@@ -27,7 +27,7 @@
     const day=new Date(selectedDate+'T12:00:00Z').getUTCDay();
     const end=day===6?780:day===1||day===5?1080:900;
     const now=nowInMexico(), result=[];
-    for(let m=540;m+duration()<=end;m+=5){
+    for(let m=540;m+duration()<=end;m+=30){
       const t=String(Math.floor(m/60)).padStart(2,'0')+':'+String(m%60).padStart(2,'0');
       if(selectedDate>now.date||(selectedDate===now.date&&t>now.time)) result.push(t);
     }

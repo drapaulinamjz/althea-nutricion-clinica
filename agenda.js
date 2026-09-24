@@ -13,10 +13,16 @@
   let selectedDate = '';
   const dateFormat = new Intl.DateTimeFormat('es-MX',{timeZone:'UTC',weekday:'long',day:'numeric',month:'long',year:'numeric'});
   function formattedDate(key) {return dateFormat.format(new Date(key+'T12:00:00Z'));}
-  function allowedDay(key) {
+  const schedules={
+    Atlacomulco:{1:{start:540,end:1020}},
+    Metepec:{2:{start:480,end:960},3:{start:480,end:900},5:{start:960,end:1140},6:{start:540,end:840}},
+    Calimaya:{4:{start:480,end:780}}
+  };
+  function schedule(key){
     const day=new Date(key+'T12:00:00Z').getUTCDay();
-    return $('branch').value==='Metepec' ? day>=1&&day<=5 : $('branch').value==='Atlacomulco' && day===6;
+    return schedules[$('branch').value]?.[day];
   }
+  function allowedDay(key) {return Boolean(schedule(key));}
   function duration() {
     const match=$('visitType').value.match(/(60|40|45) min/);
     return match ? Number(match[1]) : null;
@@ -24,10 +30,9 @@
   function slots() {
     if(!selectedDate || !allowedDay(selectedDate)) return [];
     if(duration()===null) return ['Por acordar por WhatsApp'];
-    const day=new Date(selectedDate+'T12:00:00Z').getUTCDay();
-    const end=day===6?780:day===1||day===5?1080:900;
+    const {start,end}=schedule(selectedDate);
     const now=nowInMexico(), result=[];
-    for(let m=540;m+duration()<=end;m+=30){
+    for(let m=start;m+duration()<=end;m+=30){
       const t=String(Math.floor(m/60)).padStart(2,'0')+':'+String(m%60).padStart(2,'0');
       if(selectedDate>now.date||(selectedDate===now.date&&t>now.time)) result.push(t);
     }

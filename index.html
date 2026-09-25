@@ -60,6 +60,21 @@
     .consultation .consultation-item p{margin:10px 0 0}
     @media(max-width:600px){.consultation{padding:20px 0}.consultation-item{padding:16px}}
   .dialog-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}.dialog-actions .btn{flex:1;min-width:180px}@media(max-width:600px){.dialog-actions{display:grid}.dialog-actions .btn{width:100%}}
+
+    .authority-strip{background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+    .authority-grid{display:grid;grid-template-columns:repeat(4,1fr)}
+    .authority-item{padding:20px 24px;border-right:1px solid var(--line);text-align:center}
+    .authority-item:first-child{border-left:1px solid var(--line)}
+    .authority-item span{display:block;font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--olive);margin-bottom:4px;font-weight:600}
+    .authority-item strong{display:block;font-family:"Gilda Display",serif;font-size:1.08rem;font-weight:400;line-height:1.25}
+    @media(max-width:760px){
+      .authority-grid{grid-template-columns:repeat(2,1fr)}
+      .authority-item{padding:16px 10px;border-bottom:1px solid var(--line)}
+      .authority-item:nth-child(2n){border-right:1px solid var(--line)}
+      .authority-item:nth-child(n+3){border-bottom:0}
+      .authority-item span{font-size:.6rem;letter-spacing:.1em}
+      .authority-item strong{font-size:1rem}
+    }
 </style>
 </head>
 <body>
@@ -76,6 +91,14 @@
       <div class="hero-copy"><span class="eyebrow">Atención médica y nutricional</span><h1 class="serif">Conoce tu cuerpo.<br>Cuida tu salud con un plan hecho para ti.</h1><p>Soy la Dra. Paulina Manjarrez. Te acompaño con valoración médica, alimentación personalizada y seguimiento de tu salud metabólica.</p><div class="actions"><a class="btn btn-primary" href="agenda.html">Solicitar una cita</a><a class="hero-services-link" href="#servicios">Conocer servicios →</a></div></div>
       <div class="hero-photo"><img src="dra-paulina-profesional.jpeg" alt="Dra. Paulina Manjarrez, médica cirujana" width="1024" height="1536" fetchpriority="high"><div class="hero-photo-caption"><span>Dra. Paulina Manjarrez</span><small>Medicina · Nutrición · Bienestar</small></div></div>
     </section>
+    <div class="authority-strip" aria-label="Credenciales y evaluación">
+      <div class="wrap authority-grid">
+        <div class="authority-item"><span>Formación médica</span><strong>Médica Cirujana</strong></div>
+        <div class="authority-item"><span>Posgrado</span><strong>Nutrición Clínica</strong></div>
+        <div class="authority-item"><span>Registro profesional</span><strong>Cédula 13882923</strong></div>
+        <div class="authority-item"><span>Evaluación corporal</span><strong>InBody</strong></div>
+      </div>
+    </div>
     <nav class="service-shortcuts" aria-label="Accesos a servicios"><div class="wrap"><p>¿Cómo podemos ayudarte?</p><div class="hero-focus"><a href="#servicio-obesidad">Obesidad</a><a href="#servicio-diabetes">Diabetes e hipertensión</a><a href="#servicio-somp">SOMP</a><a href="#servicio-poscirugia">Poscirugía</a><a href="#servicio-embarazo">Embarazo</a><a href="#servicio-menopausia">Premenopausia y menopausia</a><a href="#servicio-inbody">InBody</a><a href="#servicio-planes">Planes personalizados</a><a href="#servicio-suplementacion">Suplementación</a><a class="consultation-shortcut" href="#tu-consulta">¿Qué incluye tu consulta? →</a></div></div></nav>
 
     <section class="services" id="servicios"><div class="wrap"><div class="section-head"><div><span class="eyebrow">¿Cómo podemos ayudarte?</span><h2 class="serif">Servicios principales.</h2></div><p>Valoración individual y acompañamiento con base en tus objetivos y necesidades clínicas.<br><small>Fotografías ilustrativas; no representan pacientes de Althea.</small></p></div><div class="service-grid">
